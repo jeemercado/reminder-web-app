@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Note } from './note.entity';
 import { Session } from './session.entity';
+import { Todo } from './todo.entity';
 
 @Entity('m_user')
 export class User {
@@ -30,6 +31,9 @@ export class User {
 
   @OneToMany(() => Note, (note) => note.user)
   notes!: Session[];
+
+  @OneToMany(() => Todo, (todo) => todo.user)
+  todos!: Todo[];
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -6,6 +6,13 @@ import {
   updateUserNoteHandler,
 } from './controller/note.controller';
 import { createUserSessionHandler, getUserSessionsHandler } from './controller/session.controller';
+import {
+  checkUncheckUserTodoHandler,
+  createUserTodoHandler,
+  deleteUserTodoHandler,
+  getUserTodosHandler,
+  updateUserTodoHandler,
+} from './controller/todo.controller';
 import { createUserHandler } from './controller/user.controller';
 import requireSameUser from './middleware/require-same-user';
 import requireUser from './middleware/require-user';
@@ -17,6 +24,13 @@ import {
   updateNoteSchema,
 } from './schema/note.schema';
 import { createSessionSchema, deleteSessionSchema } from './schema/session.schema';
+import {
+  createTodoSchema,
+  deleteTodoSchema,
+  getTodosSchema,
+  updateTodoSchema,
+  checkUncheckTodoSchema,
+} from './schema/todo.schema';
 import { createUserSchema } from './schema/user.schema';
 
 export const initializeRoutes = (app: Express) => {
@@ -54,5 +68,32 @@ export const initializeRoutes = (app: Express) => {
     '/user/note',
     [requireUser, validateResource(deleteNoteSchema), requireSameUser],
     deleteUserNoteHandler,
+  );
+
+  /** USER TODO */
+  app.post(
+    '/user/todo',
+    [requireUser, validateResource(createTodoSchema), requireSameUser],
+    createUserTodoHandler,
+  );
+  app.get(
+    '/user/todos',
+    [requireUser, validateResource(getTodosSchema), requireSameUser],
+    getUserTodosHandler,
+  );
+  app.patch(
+    '/user/todo/check',
+    [requireUser, validateResource(checkUncheckTodoSchema), requireSameUser],
+    checkUncheckUserTodoHandler,
+  );
+  app.patch(
+    '/user/todo',
+    [requireUser, validateResource(updateTodoSchema), requireSameUser],
+    updateUserTodoHandler,
+  );
+  app.delete(
+    '/user/todo',
+    [requireUser, validateResource(deleteTodoSchema), requireSameUser],
+    deleteUserTodoHandler,
   );
 };
