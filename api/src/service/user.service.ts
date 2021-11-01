@@ -21,16 +21,17 @@ export const createUser = async (displayName: string, email: string, password: s
   }
 };
 
+export const getUserById = async (userId: number) => {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne(userId);
+  return user;
+};
+
 export const getUserByEmail = async (email: string) => {
   const userRepository = getRepository(User);
-
   const user = await userRepository
     .createQueryBuilder('user')
     .where('user.email = :email', { email })
     .getOne();
-
-  if (!user) {
-    return false;
-  }
   return user;
 };

@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from 'zod';
+import { number, object, string, TypeOf } from 'zod';
 
 export const createSessionSchema = object({
   body: object({
@@ -11,13 +11,16 @@ export const createSessionSchema = object({
   }),
 });
 
-export const logoutUserSessionSchema = object({
+export const deleteSessionSchema = object({
   body: object({
-    sessionId: string({
+    userId: number({
+      required_error: 'User ID is required',
+    }),
+    sessionId: number({
       required_error: 'Session ID is required',
     }),
   }),
 });
 
 export type CreateSessionRequestInput = TypeOf<typeof createSessionSchema>;
-export type LogoutUserSessionRequestInput = TypeOf<typeof logoutUserSessionSchema>;
+export type DeleteSessionRequestInput = TypeOf<typeof deleteSessionSchema>;

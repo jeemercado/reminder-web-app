@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Note } from './note.entity';
 import { Session } from './session.entity';
 
 @Entity('m_user')
@@ -26,6 +27,9 @@ export class User {
 
   @OneToMany(() => Session, (session) => session.user)
   sessions!: Session[];
+
+  @OneToMany(() => Note, (note) => note.user)
+  notes!: Session[];
 
   @CreateDateColumn()
   createdAt!: Date;

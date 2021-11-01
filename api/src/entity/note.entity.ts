@@ -10,18 +10,18 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity('t_user_session')
-export class Session {
+@Entity('t_user_note')
+export class Note {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
   userId!: number;
 
-  @Column({ type: 'varchar', length: '128' })
-  userAgent!: string;
+  @Column({ type: 'text' })
+  data!: string | null | undefined;
 
-  @ManyToOne(() => User, (user) => user.sessions)
+  @ManyToOne(() => User, (user) => user.notes)
   user!: User;
 
   @CreateDateColumn()

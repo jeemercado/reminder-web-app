@@ -1,5 +1,4 @@
 import config from 'config';
-import dayjs from 'dayjs';
 import { get, omit } from 'lodash';
 import { getRepository } from 'typeorm';
 import { Session } from '../entity/session.entity';
@@ -20,25 +19,21 @@ export const createSession = async (user: User, userAgent: string) => {
   }
 };
 
-export const getSessionById = async (sessionId: string) => {
+export const getSessionById = async (sessionId: number, relations?: string[]) => {
   const sessionRepository = getRepository(Session);
-  const session = await sessionRepository.findOne(sessionId);
+  const session = await sessionRepository.findOne(sessionId, { relations });
   return session;
 };
 
-export const logoutUserSession = async (sessionId: string) => {
+export const deleteSession = async (sessionId: number) => {
   const sessionRepository = getRepository(Session);
   const session = await sessionRepository.findOne(sessionId);
 
-  if (!session) {
-    return false;
-  }
-
-  session.deletedAt = dayjs().toDate();
+  if (!session) return false;
 
   try {
-    await sessionRepository.save(session);
-    return true;
+    await sessionRepository.softDelete(sessionId);
+    return session;
   } catch (error: any) {
     throw new Error(error);
   }
@@ -54,7 +49,7 @@ export const reIssueAccessToken = async (refreshToken: string) => {
   const sessionRepository = getRepository(Session);
   const session = await sessionRepository.findOne(sessionId, { relations: ['user'] });
 
-  if (!session || !session.deletedAt) return false;
+  if (!session || session.deletedAt) return false;
 
   const user = omit(session.user, 'password');
   const accessToken = signJwt(
@@ -65,7 +60,7 @@ export const reIssueAccessToken = async (refreshToken: string) => {
   return accessToken;
 };
 
-export const getSessionsByUserId = async (userId: string) => {
+export const getSessionsByUserId = async (userId: number) => {
   const sessionRepository = getRepository(Session);
   const sessions = await sessionRepository
     .createQueryBuilder('session')

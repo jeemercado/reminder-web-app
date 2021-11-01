@@ -1,5 +1,6 @@
 import config from 'config';
 import { createConnection } from 'typeorm';
+import { Note } from '../entity/note.entity';
 import { Session } from '../entity/session.entity';
 import { User } from '../entity/user.entity';
 import logger from './logger';
@@ -13,7 +14,7 @@ export const connectDb = () => {
     username: config.get<string>('DATABASE_USER'),
     password: config.get<string>('DATABASE_PASSWORD'),
     database: config.get<string>('DATABASE_NAME'),
-    entities: [User, Session],
+    entities: [User, Session, Note],
   }).then(
     () => {
       logger.info('Connection has been established successfully');
