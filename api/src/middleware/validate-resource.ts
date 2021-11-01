@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject } from 'zod';
+import { HTTP_CODE } from '../utils/http-codes';
 
 const validateResource =
   (schema: AnyZodObject) => (request: Request, response: Response, next: NextFunction) => {
@@ -11,7 +12,7 @@ const validateResource =
       });
       return next();
     } catch (error: any) {
-      return response.status(400).send(error.errors);
+      return response.status(HTTP_CODE.BAD_REQUEST).send(error.errors);
     }
   };
 

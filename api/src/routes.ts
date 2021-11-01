@@ -19,7 +19,7 @@ export const initializeRoutes = (app: Express) => {
 
   app.get('/user/sessions', requireUser, getUserSessionsHandler);
 
-  app.patch(
+  app.delete(
     '/user/session',
     requireUser,
     validateResource(logoutUserSessionSchema),

@@ -1,4 +1,5 @@
 import config from 'config';
+import dayjs from 'dayjs';
 import { get, omit } from 'lodash';
 import { getRepository } from 'typeorm';
 import { Session } from '../entity/session.entity';
@@ -19,15 +20,22 @@ export const createSession = async (user: User, userAgent: string) => {
   }
 };
 
+export const getSessionById = async (sessionId: string) => {
+  const sessionRepository = getRepository(Session);
+  const session = await sessionRepository.findOne(sessionId);
+  return session;
+};
+
 export const logoutUserSession = async (sessionId: string) => {
   const sessionRepository = getRepository(Session);
-  const session = await sessionRepository.findOneOrFail(sessionId);
+  const session = await sessionRepository.findOne(sessionId);
 
   if (!session) {
     return false;
   }
 
-  session.valid = false;
+  session.deletedAt = dayjs().toDate();
+
   try {
     await sessionRepository.save(session);
     return true;
@@ -46,7 +54,7 @@ export const reIssueAccessToken = async (refreshToken: string) => {
   const sessionRepository = getRepository(Session);
   const session = await sessionRepository.findOne(sessionId, { relations: ['user'] });
 
-  if (!session || !session.valid) return false;
+  if (!session || !session.deletedAt) return false;
 
   const user = omit(session.user, 'password');
   const accessToken = signJwt(

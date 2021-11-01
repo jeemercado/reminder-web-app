@@ -2,6 +2,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -14,9 +15,6 @@ export class Session {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'boolean', default: true })
-  valid!: Boolean;
-
   @Column({ type: 'varchar', length: '128' })
   userAgent!: string;
 
@@ -28,4 +26,7 @@ export class Session {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @DeleteDateColumn()
+  deletedAt!: Date;
 }
