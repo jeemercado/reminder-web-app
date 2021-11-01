@@ -1,14 +1,16 @@
+/* eslint-disable import/no-cycle */
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Session } from './session.entity';
 
 @Entity('m_user')
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -20,6 +22,9 @@ export class User extends BaseEntity {
 
   @Column({ type: 'varchar', length: '255' })
   password!: string;
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions!: Session[];
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -7,7 +7,10 @@ declare global {
       DATABASE_HOST: string;
       DATABASE_NAME: string;
       DATABASE_PASSWORD: string;
-      DATABASE_PORT: number;
+      DATABASE_PORT: string;
+      SALT_WORK_FACTOR: string;
+      JWT_PRIVATE_KEY: string;
+      JWT_PUBLIC_KEY: string;
     }
   }
 }

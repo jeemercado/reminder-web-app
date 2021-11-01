@@ -22,3 +22,6 @@ CREATE TABLE IF NOT EXISTS t_user_session (
 
 INSERT INTO m_user("displayName", "email", "password")
 VALUES ('jeemercado', 'mercadojee@gmail.com', 'password');
+
+
+UPDATE t_user_session SET valid = false WHERE id = 8;
